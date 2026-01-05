@@ -22,7 +22,7 @@ function App() {
     formData.append('email', email);
     setStatus('Sending fax...');
     try {
-      const response = await fetch('http://localhost:5000/send-fax', {
+      const response = await fetch('https://faxage-api.onrender.com/send-fax', {
         method: 'POST',
         body: formData,
       });
