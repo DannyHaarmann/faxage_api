@@ -18,15 +18,23 @@ function App() {
       setStatus('Please fill in all fields.');
       return;
     }
+    console.log('File debug:', file);
     if (!(file instanceof File)) {
       setStatus('Selected file is not valid. Please choose a PDF file again.');
+      console.error('File is not instance of File:', file);
       return;
     }
     if (file.type !== 'application/pdf') {
       setStatus('Only PDF files are allowed.');
+      console.error('File type is not PDF:', file.type);
       return;
     }
-    console.log('File details:', file, 'Type:', file.type, 'Instanceof File:', file instanceof File);
+    if (!(file instanceof Blob)) {
+      setStatus('File is not a Blob.');
+      console.error('File is not a Blob:', file);
+      return;
+    }
+    console.log('File is valid. Type:', file.type, 'Size:', file.size);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('faxNumber', faxNumber);
