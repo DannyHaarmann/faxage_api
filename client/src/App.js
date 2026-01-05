@@ -51,11 +51,14 @@ function App() {
       const data = await response.json();
       if (data.success) {
         setStatus('Fax sent successfully! Confirmation will be emailed.');
+        return;
       } else {
         setStatus('Failed to send fax: ' + data.error);
+        return;
       }
     } catch (err) {
       setStatus('Error sending fax.');
+      return;
     }
   };
 
