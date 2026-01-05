@@ -39,11 +39,11 @@ app.post('/send-fax', upload.single('file'), async (req, res) => {
     if (response.data && response.data.includes('<Status>Success</Status>')) {
       res.json({ success: true });
     } else {
-      res.json({ success: false, error: 'Faxage API error.' });
+      res.json({ success: false, error: response.data || 'Faxage API error.' });
     }
   } catch (err) {
     if (file && fs.existsSync(file.path)) fs.unlinkSync(file.path);
-    res.json({ success: false, error: 'Server error.' });
+    res.json({ success: false, error: err && err.message ? err.message : 'Server error.' });
   }
 });
 
