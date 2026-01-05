@@ -18,6 +18,10 @@ function App() {
       setStatus('Please fill in all fields.');
       return;
     }
+    if (!(file instanceof File)) {
+      setStatus('Selected file is not valid. Please choose a PDF file again.');
+      return;
+    }
     const formData = new FormData();
     formData.append('file', file);
     formData.append('faxNumber', faxNumber);
