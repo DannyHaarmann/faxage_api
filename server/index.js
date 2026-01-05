@@ -7,12 +7,7 @@ const path = require('path');
 
 
 const app = express();
-// Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-}
-const upload = multer({ dest: uploadsDir });
+const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors());
 
 // Replace with your Faxage credentials
@@ -37,20 +32,17 @@ app.post('/send-fax', upload.single('file'), async (req, res) => {
     formData.append('password', password);
     formData.append('faxnum', faxNumber);
     formData.append('notify_email', email);
-    formData.append('file', fs.createReadStream(file.path), file.originalname);
+    formData.append('file', file.buffer, file.originalname);
 
     const response = await axios.post('https://api.faxage.com/httpsfax', formData, {
       headers: formData.getHeaders(),
     });
-    // Clean up uploaded file
-    fs.unlinkSync(file.path);
     if (response.data && response.data.includes('<Status>Success</Status>')) {
       res.json({ success: true });
     } else {
       res.json({ success: false, error: response.data || 'Faxage API error.' });
     }
   } catch (err) {
-    if (file && fs.existsSync(file.path)) fs.unlinkSync(file.path);
     res.json({ success: false, error: err && err.message ? err.message : 'Server error.' });
   }
 });
