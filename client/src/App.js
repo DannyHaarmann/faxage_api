@@ -22,6 +22,11 @@ function App() {
       setStatus('Selected file is not valid. Please choose a PDF file again.');
       return;
     }
+    if (file.type !== 'application/pdf') {
+      setStatus('Only PDF files are allowed.');
+      return;
+    }
+    console.log('File details:', file, 'Type:', file.type, 'Instanceof File:', file instanceof File);
     const formData = new FormData();
     formData.append('file', file);
     formData.append('faxNumber', faxNumber);
@@ -60,7 +65,7 @@ function App() {
         </div>
         <div style={{ marginTop: 10 }}>
           <label>File to Fax:</label><br />
-          <input type="file" onChange={handleFileChange} />
+          <input type="file" accept="application/pdf" onChange={handleFileChange} />
         </div>
         <div style={{ marginTop: 10 }}>
           <label>Fax Number:</label><br />
