@@ -5,8 +5,14 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
+
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+const upload = multer({ dest: uploadsDir });
 app.use(cors());
 
 // Replace with your Faxage credentials
@@ -15,6 +21,8 @@ const FAXAGE_COMPANY = process.env.FAXAGE_COMPANY || 'YOUR_FAXAGE_COMPANY';
 const FAXAGE_PASSWORD = process.env.FAXAGE_PASSWORD || 'YOUR_FAXAGE_PASSWORD';
 
 app.post('/send-fax', upload.single('file'), async (req, res) => {
+  console.log('req.body:', req.body);
+  console.log('req.file:', req.file);
   const { faxNumber, email, username, password } = req.body;
   const file = req.file;
   const company = '121117';
