@@ -5,7 +5,6 @@ function App() {
   const [faxNumber, setFaxNumber] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [company, setCompany] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
 
@@ -15,7 +14,7 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file || !faxNumber || !email || !username || !company || !password) {
+    if (!file || !faxNumber || !email || !username || !password) {
       setStatus('Please fill in all fields.');
       return;
     }
@@ -24,7 +23,7 @@ function App() {
     formData.append('faxNumber', faxNumber);
     formData.append('email', email);
     formData.append('username', username);
-    formData.append('company', company);
+    formData.append('company', '121117');
     formData.append('password', password);
     setStatus('Sending fax...');
     try {
@@ -50,10 +49,6 @@ function App() {
         <div>
           <label>Faxage Username:</label><br />
           <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Faxage Username" />
-        </div>
-        <div style={{ marginTop: 10 }}>
-          <label>Faxage Company:</label><br />
-          <input type="text" value={company} onChange={e => setCompany(e.target.value)} placeholder="Faxage Company" />
         </div>
         <div style={{ marginTop: 10 }}>
           <label>Faxage Password:</label><br />

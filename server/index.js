@@ -9,23 +9,24 @@ const app = express();
 const upload = multer({ dest: 'uploads/' });
 app.use(cors());
 
-// Replace with your Faxage API credentials
-const FAXAGE_USERNAME = 'YOUR_FAXAGE_USERNAME';
-const FAXAGE_PASSWORD = 'YOUR_FAXAGE_PASSWORD';
-const FAXAGE_APIKEY = 'YOUR_FAXAGE_APIKEY';
+// Replace with your Faxage credentials
+const FAXAGE_USERNAME = process.env.FAXAGE_USERNAME || 'YOUR_FAXAGE_USERNAME';
+const FAXAGE_COMPANY = process.env.FAXAGE_COMPANY || 'YOUR_FAXAGE_COMPANY';
+const FAXAGE_PASSWORD = process.env.FAXAGE_PASSWORD || 'YOUR_FAXAGE_PASSWORD';
 
 app.post('/send-fax', upload.single('file'), async (req, res) => {
-  const { faxNumber, email } = req.body;
+  const { faxNumber, email, username, password } = req.body;
   const file = req.file;
-  if (!faxNumber || !email || !file) {
+  const company = '121117';
+  if (!faxNumber || !email || !file || !username || !password) {
     return res.json({ success: false, error: 'Missing required fields.' });
   }
   try {
     // Prepare Faxage API request
     const formData = new FormData();
-    formData.append('username', FAXAGE_USERNAME);
-    formData.append('password', FAXAGE_PASSWORD);
-    formData.append('api_key', FAXAGE_APIKEY);
+    formData.append('username', username);
+    formData.append('company', company);
+    formData.append('password', password);
     formData.append('faxnum', faxNumber);
     formData.append('notify_email', email);
     formData.append('file', fs.createReadStream(file.path), file.originalname);
